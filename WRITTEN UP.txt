@@ -1,0 +1,26 @@
+STEPS:
+1.SELECT THE ASP.NET WEB APPLICATION(.NET FRAMEWORK)
+2.CHOOSE MVC
+3.GO TO MODEL AND RIGHT CLICK THERE ADD THE DATABASE CONNECTION.
+4.THEN ADD THE CONTROLLER OF STUDENT MARKS
+5.ADD STUDENT LINK IN THE LAYOUT
+6.RUN THE APPLICATION THEN YOU GOT THE STUDENT MARKS OUTPUT.
+
+EXPLANATION OF SQL QUERY:
+
+CREATE DATABASE SampleDB;: This statement creates a new database named SampleDB if it doesn't already exist.
+
+USE SampleDB;: This statement selects the SampleDB database for subsequent operations, meaning that any further SQL statements will be executed within this database context.
+
+CREATE TABLE StudentMarks: This statement creates a table named StudentMarks with three columns: StudentID (an integer and the primary key of the table), StudentName (a variable-length string for the student's name), and Marks (an integer for the student's marks)
+
+INSERT INTO StudentMarks : This set of statements inserts sample data into the StudentMarks table. It adds records for five students, including their StudentID, StudentName, and Marks.
+
+SELECT: This query retrieves basic statistics on the marks of the students in the StudentMarks table. It calculates the following statistics:
+
+MIN(Marks) AS MinMarks: The minimum mark obtained by any student.
+MAX(Marks) AS MaxMarks: The maximum mark obtained by any student.
+AVG(Marks) AS AvgMarks: The average (mean) mark of all students.
+SUM(Marks) AS TotalMarks: The total sum of all the marks.
+COUNT(*) AS TotalStudents: The total number of students in the table.
+These statistics provide insights into the distribution of marks among the students in the StudentMarks table. It's a simple example of using SQL to perform aggregate calculations on data in a database table.

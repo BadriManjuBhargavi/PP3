@@ -1,0 +1,220 @@
+SQL QUERY:
+-- Create a sample database (if it doesn't exist)
+CREATE DATABASE SampleDB;
+GO
+
+-- Use the created database
+USE SampleDB;
+GO
+
+-- Create a sample table for student data
+CREATE TABLE StudentMarks (
+    StudentID INT PRIMARY KEY,
+    StudentName VARCHAR(50),
+    Marks INT
+);
+
+-- Insert some sample data
+INSERT INTO StudentMarks (StudentID, StudentName, Marks)
+VALUES
+    (1, 'Alice', 85),
+    (2, 'Bob', 92),
+    (3, 'Charlie', 78),
+    (4, 'David', 65),
+    (5, 'Eve', 88);
+
+-- Query to display basic statistics of marks
+SELECT
+    MIN(Marks) AS MinMarks,
+    MAX(Marks) AS MaxMarks,
+    AVG(Marks) AS AvgMarks,
+    SUM(Marks) AS TotalMarks,
+    COUNT(*) AS TotalStudents
+FROM StudentMarks;
+
+STUDENT MARK.CS:
+namespace SS.Models
+{
+    using System;
+    using System.Collections.Generic;
+    
+    public partial class StudentMark
+    {
+        public int StudentID { get; set; }
+        public string StudentName { get; set; }
+        public Nullable<int> Marks { get; set; }
+    }
+}
+
+STUDENTCONTROLLER.CS:
+
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
+using System.Linq;
+using System.Net;
+using System.Web;
+using System.Web.Mvc;
+using SS.Models;
+
+namespace SS.Controllers
+{
+    public class StudentMarksController : Controller
+    {
+        private SampleDBEntities1 db = new SampleDBEntities1();
+
+        // GET: StudentMarks
+        public ActionResult Index()
+        {
+            return View(db.StudentMarks.ToList());
+        }
+
+        // GET: StudentMarks/Details/5
+        public ActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            StudentMark studentMark = db.StudentMarks.Find(id);
+            if (studentMark == null)
+            {
+                return HttpNotFound();
+            }
+            return View(studentMark);
+        }
+
+        // GET: StudentMarks/Create
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: StudentMarks/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "StudentID,StudentName,Marks")] StudentMark studentMark)
+        {
+            if (ModelState.IsValid)
+            {
+                db.StudentMarks.Add(studentMark);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            return View(studentMark);
+        }
+
+        // GET: StudentMarks/Edit/5
+        public ActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            StudentMark studentMark = db.StudentMarks.Find(id);
+            if (studentMark == null)
+            {
+                return HttpNotFound();
+            }
+            return View(studentMark);
+        }
+
+        // POST: StudentMarks/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit([Bind(Include = "StudentID,StudentName,Marks")] StudentMark studentMark)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(studentMark).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(studentMark);
+        }
+
+        // GET: StudentMarks/Delete/5
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            StudentMark studentMark = db.StudentMarks.Find(id);
+            if (studentMark == null)
+            {
+                return HttpNotFound();
+            }
+            return View(studentMark);
+        }
+
+        // POST: StudentMarks/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            StudentMark studentMark = db.StudentMarks.Find(id);
+            db.StudentMarks.Remove(studentMark);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+    }
+}
+
+LAYOUT.CSHTML:
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
+        <div class="container">
+            @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
+                <ul class="navbar-nav flex-grow-1">
+                    <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("StudentMark", "Index", "StudentMarks", new { area = "" }, new { @class = "nav-link" })</li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
